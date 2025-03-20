@@ -6,6 +6,12 @@
  npx tailwindcss init -p
  npm i -D daisyui@latest
 
+ npm i react-helmet-async
+ or
+ npm install react-helmet-async --legacy-peer-deps
+ npm i react-parallax 
+
+
 tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -37,6 +43,8 @@ env: {
   "react/prop-type": "off"
  }
  
+
+ ****** css parallex
 ```
 
 # res-client

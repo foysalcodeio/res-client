@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         background: "#ffffff", // White background
       },
+      fontFamily:{
+        
+      }
     },
   },
   plugins: [require("daisyui")],
