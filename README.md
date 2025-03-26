@@ -9,7 +9,10 @@
  npm i react-helmet-async
  or
  npm install react-helmet-async --legacy-peer-deps
- npm i react-parallax 
+ npm i react-parallax --legacy-peer-deps
+
+ npm install --save react-tabs --legacy-peer-deps
+ npm install swiper --legacy-peer-deps
 
 
 tailwind.config.js
