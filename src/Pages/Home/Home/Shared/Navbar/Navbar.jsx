@@ -1,73 +1,122 @@
-import { Link } from "react-router-dom";
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { AuthContext } from '../../../../../providers/AuthProvider'
+import { FaShoppingCart } from "react-icons/fa";
+import { SlLogin } from "react-icons/sl";
 
 const Navbar = () => {
-    //responsive option
-    const navOptions = <>
-        <li><Link to={`/menu`}>Our Menu</Link></li>
-        <li>
-            <a>Parent</a>
-            <ul className="p-2">
-                <li><a>Submenu 1</a></li>
-                <li><a>Submenu 2</a></li>
-            </ul>
-        </li>
-    </>
+  const { user, logOut } = useContext(AuthContext)
 
-    const navOptions2 = <>
-        <li><Link to={`/`}>Home</Link></li>
-        <li><Link to={`/menu`}>Our Menu</Link></li>
-        <li><Link to={`/order/salad`}>Order Food</Link></li>
-        <li>
-            <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                    <li><a>Submenu 1</a></li>
-                    <li><a>Submenu 2</a></li>
-                </ul>
-            </details>
-        </li>
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch(error => console.log(error))
+  }
+
+  //responsive option
+  const navOptions = (
+    <>
+      <li>
+        <Link to={`/menu`}>Our Menu</Link>
+      </li>
+      <li>
+        <a>Parent</a>
+        <ul className='p-2'>
+          <li>
+            <a>Submenu 1</a>
+          </li>
+          <li>
+            <a>Submenu 2</a>
+          </li>
+        </ul>
+      </li>
     </>
-    return (
+  )
+
+  const navOptions2 = (
+    <>
+      <li>
+        <Link to={`/`}>Home</Link>
+      </li>
+      <li>
+        <Link to={`/menu`}>Our Menu</Link>
+      </li>
+      <li>
+        <Link to={`/order/salad`}>Order Food</Link>
+      </li>
+      <li>
+        <Link to={`/secret`}>Secret</Link>
+      </li>
+      <li>
+        <Link to='/'>
+          <button className='btn'>
+          <FaShoppingCart className='mr-2' />
+            <div className='badge badge-warning'>+99</div>
+          </button>
+        </Link>
+      </li>
+      {user ? (
         <>
-            <div className="navbar fixed z-10 bg-opacity-80 bg-base-100">
-                <div className="navbar-start">
-                    <div className="dropdown">
-                        <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h8m-8 6h16" />
-                            </svg>
-                        </div>
-                        <ul
-                            tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+          {/* <span>{user?.displayName}</span> */}
 
-                            {navOptions}
-
-                            <li><a>Item 3</a></li>
-                        </ul>
-                    </div>
-                    <a className="btn btn-ghost text-xl"></a>
-                </div>
-                <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
-                        {navOptions2}
-                    </ul>
-                </div>
-                <div className="navbar-end">
-                    <a className="btn">Button</a>
-                </div>
-            </div>
+          <li>
+            <Link onClick={handleLogOut} className='btn-ghost'>
+              Log out
+            </Link>
+          </li>
         </>
-    );
-};
+      ) : (
+        <>
+          <li>
+            <Link to={`/login`}><SlLogin /></Link>
+          </li>
+        </>
+      )}
+    </>
+  )
+  return (
+    <>
+      <div className='navbar fixed z-10 bg-opacity-90 bg-base-100'>
+        <div className='navbar-start'>
+          <div className='dropdown'>
+            <div tabIndex={0} role='button' className='btn btn-ghost lg:hidden'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M4 6h16M4 12h8m-8 6h16'
+                />
+              </svg>
+            </div>
+            <ul
+              tabIndex={0}
+              className='menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow'
+            >
+              {navOptions}
 
-export default Navbar;
+              <li>
+                <a>Item 3</a>
+              </li>
+            </ul>
+          </div>
+          <a className='btn btn-ghost text-xl'></a>
+        </div>
+        <div className='navbar-center hidden lg:flex'>
+          <ul className='menu menu-horizontal px-1'>{navOptions2}</ul>
+        </div>
+        <div className='navbar-end'>
+          <a className='btn'>Button</a>
+        </div>
+      </div>
+    </>
+  )
+}
+
+export default Navbar
