@@ -13,8 +13,13 @@
 
  npm install --save react-tabs --legacy-peer-deps
  npm install swiper --legacy-peer-deps
+ npm install react-simple-captcha --legacy-peer-deps
 
+ npm install react-hook-form --legacy-peer-deps
+ npm install sweetalert2 --legacy-peer-deps
 
+ npm install axios --legacy-peer-deps
+ npm i @tanstack/react-query --legacy-peer-deps
 tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
