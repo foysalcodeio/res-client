@@ -13,32 +13,41 @@ const SignUp = () => {
     formState: { errors }
   } = useForm({ mode: 'onTouched' })
 
-  const {createUser, updateUserProfile} = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { createUser, updateUserProfile } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     console.log(data)
     createUser(data.email, data.password)
-    .then(result => {
-        const loggedUser = result.user;
-        console.log(loggedUser);
+      .then((result) => {
+        const loggedUser = result.user
+        console.log(loggedUser)
         updateUserProfile(data.name, data.photoURL)
-        .then(() => {
-          console.log('user profile info updated')
-          reset();
-          Swal.fire({
-            position: "top-end",
-            icon: "success",
-            title: "User created successfull",
-            showConfirmButton: false,
-            timer: 1500
-          });
-          navigate('/');
+          .then(() => {
+            console.log('user profile info updated')
+            reset()
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'User created successfully',
+              showConfirmButton: false,
+              timer: 1500
+            })
+            navigate('/')
+          })
+          .catch((error) => {
+            console.error('Profile update error:', error)
+          })
+      })
+      .catch((error) => {
+        console.error('Signup error:', error)
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: error.message
         })
-        .catch(error => console.log(error))
-    })
+      })
   }
-
 
   return (
     <>
@@ -58,77 +67,82 @@ const SignUp = () => {
           <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl'>
             <form onSubmit={handleSubmit(onSubmit)} className='card-body'>
 
+              {/* Name Field */}
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'>Name</span>
                 </label>
                 <input
                   type='text'
-                  name='name'
-                  {...register('name', { required: true })}
                   placeholder='Foysal Ahmed'
                   className='input input-bordered'
-                  required
+                  {...register('name', { required: 'Name is required' })}
                 />
                 {errors.name && (
-                  <span className='text-red-500'>This field is required</span>
+                  <span className='text-red-500'>{errors.name.message}</span>
                 )}
               </div>
 
+              {/* Photo URL Field */}
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'>Photo URL</span>
                 </label>
                 <input
                   type='text'
-                  {...register('photoURL', { required: true })}
-                  placeholder='Photo URL'
+                  placeholder='https://example.com/photo.jpg'
                   className='input input-bordered'
-                  required
+                  {...register('photoURL', { required: 'Photo URL is required' })}
                 />
+                {errors.photoURL && (
+                  <span className='text-red-500'>{errors.photoURL.message}</span>
+                )}
               </div>
 
-
-
+              {/* Email Field */}
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'>Email</span>
                 </label>
                 <input
                   type='email'
-                  name='email'
-                  {...register('email', { required: true })}
                   placeholder='foysaldev1996@gmail.com'
                   className='input input-bordered'
-                  required
+                  {...register('email', { required: 'Email is required' })}
                 />
+                {errors.email && (
+                  <span className='text-red-500'>{errors.email.message}</span>
+                )}
               </div>
 
+              {/* Password Field */}
               <div className='form-control'>
                 <label className='label'>
                   <span className='label-text'>Password</span>
                 </label>
                 <input
                   type='password'
-                  {...register('password', {
-                    required: true,
-                    minLength: 6,
-                    maxLength: 20,
-                    pattern: /^[A-Za-z]+$/i
-                  })}
-                  placeholder='password'
+                  placeholder='Password'
                   className='input input-bordered'
-                  required
+                  {...register('password', {
+                    required: 'Password is required',
+                    minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 characters'
+                    },
+                    maxLength: {
+                      value: 20,
+                      message: 'Password must be less than 20 characters'
+                    },
+                    pattern: {
+                      value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,20}$/,
+                      message:
+                        'Password must contain letters and numbers'
+                    }
+                  })}
                 />
-                {errors.password?.type === 'minLength' && (
-                  <p className='text-red-600'>
-                    password length min 6 required{' '}
-                  </p>
-                )}
-                {errors.password?.type === 'maxLength' && (
-                  <p className='text-red-600'>
-                    password length max 20 required{' '}
-                  </p>
+                {errors.password && (
+                  <p className='text-red-600'>{errors.password.message}</p>
                 )}
 
                 <label className='label'>
@@ -137,6 +151,8 @@ const SignUp = () => {
                   </a>
                 </label>
               </div>
+
+              {/* Submit Button */}
               <div className='form-control mt-6'>
                 <input
                   className='btn btn-primary'
@@ -145,8 +161,15 @@ const SignUp = () => {
                 />
               </div>
             </form>
+
+            {/* Link to Login */}
             <div className='card-body'>
-            <p>Already have an account <Link className='text-blue-700 font-bold' to="/login">Login</Link> </p>
+              <p>
+                Already have an account?{' '}
+                <Link className='text-blue-700 font-bold' to='/login'>
+                  Login
+                </Link>
+              </p>
             </div>
           </div>
         </div>
