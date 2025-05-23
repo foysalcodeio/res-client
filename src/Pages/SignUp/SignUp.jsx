@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form'
 import { AuthContext } from '../../providers/AuthProvider'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import useAxiosPublic from '../../hooks/useAxiosPublic'
 
 const SignUp = () => {
+  const axiosPublic = useAxiosPublic()
   const {
     register,
     handleSubmit,
@@ -16,30 +18,41 @@ const SignUp = () => {
   const { createUser, updateUserProfile } = useContext(AuthContext)
   const navigate = useNavigate()
 
-  const onSubmit = (data) => {
+  const onSubmit = data => {
     console.log(data)
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(result => {
         const loggedUser = result.user
         console.log(loggedUser)
         updateUserProfile(data.name, data.photoURL)
           .then(() => {
-            console.log('user profile info updated')
-            reset()
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'User created successfully',
-              showConfirmButton: false,
-              timer: 1500
+            //console.log('user profile info updated')
+
+            //create user entry in the database
+            const userInfo = {
+              name: 'data.name',
+              photo: 'data.photoURL'
+            }
+            axiosPublic.post('/users', userInfo).then(res => {
+              if (res.data.insertedId) {
+                console.log('user added to the database');
+                reset();
+                Swal.fire({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: 'User created successfully',
+                  showConfirmButton: false,
+                  timer: 1500
+                })
+                navigate('/')
+              }
             })
-            navigate('/')
           })
-          .catch((error) => {
+          .catch(error => {
             console.error('Profile update error:', error)
           })
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Signup error:', error)
         Swal.fire({
           icon: 'error',
@@ -66,7 +79,6 @@ const SignUp = () => {
           </div>
           <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl'>
             <form onSubmit={handleSubmit(onSubmit)} className='card-body'>
-
               {/* Name Field */}
               <div className='form-control'>
                 <label className='label'>
@@ -92,10 +104,14 @@ const SignUp = () => {
                   type='text'
                   placeholder='https://example.com/photo.jpg'
                   className='input input-bordered'
-                  {...register('photoURL', { required: 'Photo URL is required' })}
+                  {...register('photoURL', {
+                    required: 'Photo URL is required'
+                  })}
                 />
                 {errors.photoURL && (
-                  <span className='text-red-500'>{errors.photoURL.message}</span>
+                  <span className='text-red-500'>
+                    {errors.photoURL.message}
+                  </span>
                 )}
               </div>
 
@@ -136,8 +152,7 @@ const SignUp = () => {
                     },
                     pattern: {
                       value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{6,20}$/,
-                      message:
-                        'Password must contain letters and numbers'
+                      message: 'Password must contain letters and numbers'
                     }
                   })}
                 />
