@@ -8,18 +8,21 @@ import { AuthContext } from '../../providers/AuthProvider'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import Swal from 'sweetalert2'
+import SocialLogin from '../../Components/SocialLogin/SocialLogin'
 
 
 
 
 const Login = () => {
-  const [disabled, setDisabled] = useState(true)
+  const [disabled, setDisabled] = useState(true);
   const { signIn } = useContext(AuthContext)
   const navigate = useNavigate()
   const location = useLocation()
 
-  const from = location.state?.from?.pathname || '/'
-  console.log('user access location ', location.state);
+  const from = location.state?.from?.pathname || '/';
+  // console.log('user access location ', location.state);
+  console.log('user access location: ', location.state?.from?.pathname ?? 'direct access');
+
 
   useEffect(() => {
     loadCaptchaEnginge(6)
@@ -69,6 +72,7 @@ const Login = () => {
             </p>
           </div>
           <div className='card bg-base-100 md:w-1/2 max-w-sm shadow-2xl'>
+
             <form onSubmit={handleLogin} className='card-body'>
               <div className='form-control'>
                 <label className='label'>
@@ -114,25 +118,32 @@ const Login = () => {
                 />
               </div>
 
-              <div className='form-control mt-6'>
+              <div className='form-control mt-4'>
                 <input
-                  disabled={disabled}
+                  // disabled={disabled}
+                  disabled={false}
                   className='btn btn-primary'
                   type='submit'
                   value='Login'
                 />
               </div>
             </form>
+            
             <div className='card-body'>
-              <p>
+              <p className='px-4'>
                 Already have an account{' '}
                 <Link className='text-blue-700 font-bold' to='/signup'>
                   Create an account
                 </Link>{' '}
+                
               </p>
+              <SocialLogin />
             </div>
+
+
           </div>
         </div>
+        
       </div>
     </>
   )

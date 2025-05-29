@@ -179,7 +179,7 @@ const SignUp = () => {
 
             {/* Link to Login */}
             <div className='card-body'>
-              <p>
+              <p className='px-4'>
                 Already have an account?{' '}
                 <Link className='text-blue-700 font-bold' to='/login'>
                   Login
