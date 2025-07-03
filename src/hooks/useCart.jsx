@@ -10,7 +10,7 @@ const useCart = () => {
         queryKey: ['cart', user?.email], // it's look like cash, doesn't reload again and again
         queryFn: async () => {
             const res = await axiosSecure.get(`/carts?email=${user.email}`)
-            return res.data 
+            return res.data;
         }
     })
     return [cart, refetch]
